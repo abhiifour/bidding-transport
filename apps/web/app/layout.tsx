@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
+import { QueryClientWrapperProvider } from "@/lib/QueryClientProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -23,8 +25,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} w-[1000px] mx-auto`}>
+      <QueryClientWrapperProvider>
+          {children}
+        <Toaster/>
+      </QueryClientWrapperProvider>
       </body>
     </html>
   );

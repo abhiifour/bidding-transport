@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+
+datasource db {
+  provider = "postgresql" 
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  uid       String   @unique 
+  email     String   @unique
+  role      Role
+  createdAt DateTime @default(now())
+
+  bids       Bid[]
+  manualDeals ManualDeal[] @relation("UserManualDeals")
+}
+
+model Transporter {
+  id           String   @id @default(uuid())
+  name         String
+  contact      String?
+  vehicleType  String?
+  capacity     Float?
+  status       Status   @default(active)
+  createdAt    DateTime @default(now())
+
+  bidOffers    BidOffer[]
+  manualDeals  ManualDeal[] @relation("TransporterManualDeals")
+}
+
+model Bid {
+  id               String      @id @default(uuid())
+  createdById      String
+  createdBy        User        @relation(fields: [createdById], references: [uid])
+  materialType     String
+  quantity         Float
+  pickupLocation   String
+  deliveryLocation String
+  deadline         DateTime
+  basePriceEstimate Float?
+  status           BidStatus   @default(open)
+  createdAt        DateTime    @default(now())
+  requirement      String?
+  bidOffers        BidOffer[]
+}
+
+model BidOffer {
+  id            String      @id @default(uuid())
+  bidId         String
+  transporterId String
+  offeredPrice  Float
+  offerDate     DateTime    @default(now())
+  message       String?
+  status        BidOfferStatus @default(pending)
+  bid           Bid         @relation(fields: [bidId], references: [id])
+  transporter   Transporter @relation(fields: [transporterId], references: [id])
+}
+
+model ManualDeal {
+  id            String      @id @default(uuid())
+  transporterId String
+  loggedById    String
+  materialType  String
+  amount        Float
+  quantity      Float
+  dealDate      DateTime
+  createdAt     DateTime    @default(now())
+
+  transporter   Transporter @relation("TransporterManualDeals", fields: [transporterId], references: [id])
+  loggedBy      User        @relation("UserManualDeals", fields: [loggedById], references: [id])
+}
+
+model Deal {
+  id            String      @id @default(uuid())
+  transporterId String
+  userId        String
+  bidId         String
+  createdAt     DateTime    @default(now())
+
+}
+
+enum Role {
+  admin
+  staff
+}
+
+enum Status {
+  active
+  inactive
+}
+
+enum BidStatus {
+  open
+  accepted
+  closed
+}
+
+enum BidOfferStatus {
+  pending
+  accepted
+  rejected
+}
