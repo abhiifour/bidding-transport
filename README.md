@@ -60,7 +60,7 @@ Create a file `serviceAccountKey.json` at apps/server/src/auth which looks somet
 Create a `.env` file in the apps/server or simply run `cp .env.example .env` :
 
 GEMINI_API_KEY=
-DATABASE_URL=
+DATABASE_URL=postgresql://postgres:randompassword@localhost:5432/postgres
 
 ```
 
