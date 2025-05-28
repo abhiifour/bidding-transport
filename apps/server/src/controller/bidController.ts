@@ -1,6 +1,7 @@
 
 import type { Request, Response } from "express";
 import prisma from "../utils/db"
+import { predictBidPrice } from "../utils/ai-shit";
 
 //create bid
 
@@ -8,6 +9,7 @@ export async function createBid(req: Request, res: Response): Promise<any> {
   const { requirement, createdById, materialType, quantity, pickupLocation, deliveryLocation, deadline  } = req.body;
   try {
     
+    const amount:string | any  = await predictBidPrice(materialType,quantity,pickupLocation,deliveryLocation,deadline,requirement)
     const newBid = await prisma.bid.create({
       data: {
             requirement,
@@ -16,7 +18,8 @@ export async function createBid(req: Request, res: Response): Promise<any> {
             quantity,
             pickupLocation,
             deliveryLocation,
-            deadline
+            deadline,
+            basePriceEstimate: parseFloat(amount)
         }
     }) 
 
@@ -62,3 +65,5 @@ export async function getAllBids(req: Request, res: Response): Promise<any> {
     return res.status(500).send("Internal Server Error");
   }
 }
+
+

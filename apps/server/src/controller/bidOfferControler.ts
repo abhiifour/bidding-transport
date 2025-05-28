@@ -19,6 +19,7 @@ export async function createBidOffer( req: Request, res: Response): Promise<any>
         return res.status(200).json(bidOffer)
         
     } catch (error) {
+        console.log("error creating bid offer:" , error)
         return res.status(404).json(error)
     }
 }
@@ -62,8 +63,50 @@ export async function updateBidOffer( req: Request, res: Response): Promise<any>
         return res.status(200).json(bidOffer)
         
     } catch (error) {
+        console.log("error updating bid offer:", error)
         return res.status(404).json(error)
     }
 }
 
 
+export async function getBidOffers( req: Request, res: Response): Promise<any> {
+    
+    const {bidId} = req.params;
+    try {
+        const bidOffers = await prisma.bidOffer.findMany({
+            where: {
+                bidId
+            },
+            include:{
+                transporter:true
+            }
+        })
+        return res.status(200).json(bidOffers)
+
+    } catch (error) {
+        console.log("error fetching bid offers:" , error)
+        return res.status(404).json(error)
+    }
+}
+
+
+export async function getABidOffer( req: Request, res: Response): Promise<any> {
+    
+    const {bidId} = req.params;
+    try {
+        const bidOffer = await prisma.bidOffer.findMany({
+            where: {
+                bidId,
+                status:"accepted"
+            },
+            include:{
+                bid:true
+            }
+        })
+        return res.status(200).json(bidOffer)
+
+    } catch (error) {
+        console.log("error fetching bid offer:" , error)
+        return res.status(404).json(error)
+    }
+}

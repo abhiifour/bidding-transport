@@ -40,7 +40,8 @@ export async function createStaff(req: Request, res: Response) : Promise<any> {
 // reset the password 
 export async function resetStaffPassword(req: Request, res: Response): Promise<any> {
 
-  const {email, password} = req.body;
+  try {
+    const {email, password} = req.body;
   const user = await superAdmin.auth().getUserByEmail(email);
   if (!user) {
     return res.status(404).send("User not found");
@@ -50,7 +51,13 @@ export async function resetStaffPassword(req: Request, res: Response): Promise<a
     password,
   });
 
-  console.log(`Reset password for staff user:`, email);
+   return res.status(200).send("Staff user password reset successfully");
+  } catch (error) {
+    console.error("Error resetting staff user password:", error);
+    return res.status(500).send("Error resetting staff user password");
+  }
+
+
 }
 
 

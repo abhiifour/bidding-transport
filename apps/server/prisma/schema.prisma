@@ -37,6 +37,7 @@ model Transporter {
 
   bidOffers    BidOffer[]
   manualDeals  ManualDeal[] @relation("TransporterManualDeals")
+  Deals        Deal[] @relation("TransporterDeals")
 }
 
 model Bid {
@@ -78,7 +79,7 @@ model ManualDeal {
   createdAt     DateTime    @default(now())
 
   transporter   Transporter @relation("TransporterManualDeals", fields: [transporterId], references: [id])
-  loggedBy      User        @relation("UserManualDeals", fields: [loggedById], references: [id])
+  loggedBy      User        @relation("UserManualDeals", fields: [loggedById], references: [uid])
 }
 
 model Deal {
@@ -87,7 +88,7 @@ model Deal {
   userId        String
   bidId         String
   createdAt     DateTime    @default(now())
-
+  transporter   Transporter @relation("TransporterDeals", fields: [transporterId], references: [id])
 }
 
 enum Role {

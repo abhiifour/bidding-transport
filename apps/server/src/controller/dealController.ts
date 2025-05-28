@@ -39,6 +39,7 @@ export async function logManualDeal(req: Request, res: Response): Promise<any> {
         return res.status(200).json(deal);
         
     } catch (error) {
+        console.log("error creating manual deal",error)
         return res.status(404).json(error);
     }
 }
@@ -87,7 +88,11 @@ export async function deleteManualDeal(req: Request, res: Response): Promise<any
 
 export async function getAllDeals(req: Request, res: Response): Promise<any> {
   try {
-    const deals = await prisma.deal.findMany();
+    const deals = await prisma.deal.findMany({
+        include:{
+            transporter:true
+        }
+    });
     return res.status(200).json(deals);
   } catch (error) {
     console.error("Error fetching all deals:", error);
@@ -97,7 +102,11 @@ export async function getAllDeals(req: Request, res: Response): Promise<any> {
 
 export async function getAllManualDeals(req: Request, res: Response): Promise<any> {
   try {
-    const deals = await prisma.manualDeal.findMany();
+    const deals = await prisma.manualDeal.findMany({
+        include:{
+            transporter: true,
+        },
+    });
     return res.status(200).json(deals);
   } catch (error) {
     console.error("Error fetching all manual deals:", error);
