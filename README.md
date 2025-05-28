@@ -6,7 +6,7 @@ A full-stack monorepo transport bidding platform built using **Next.js**, **Tail
 
 ## 📦 Tech Stack
 
-- **Frontend**: Next.js, Tailwind CSS, ShadCN UI
+- **Frontend**: Next.js, Tailwind CSS, ShadCN UI , Tanstack Query
 - **Backend**: Express.js, Firebase Admin SDK
 - **Database**: PostgreSQL with Prisma ORM
 - **Monorepo**: TurboRepo
