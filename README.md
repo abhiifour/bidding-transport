@@ -1,84 +1,82 @@
-# Turborepo starter
+# 🚚 Transport Bidding App
 
-This Turborepo starter is maintained by the Turborepo core team.
+A full-stack monorepo transport bidding platform built using **Next.js**, **Tailwind CSS**, **ShadCN UI**, **Express**, **Firebase Admin SDK**, **Prisma**, and **PostgreSQL**, powered by **Bun** and orchestrated with **TurboRepo** and **Docker**.
 
-## Using this example
+---
 
-Run the following command:
+## 📦 Tech Stack
 
-```sh
-npx create-turbo@latest
-```
+- **Frontend**: Next.js, Tailwind CSS, ShadCN UI
+- **Backend**: Express.js, Firebase Admin SDK
+- **Database**: PostgreSQL with Prisma ORM
+- **Monorepo**: TurboRepo
+- **Runtime**: Bun
+- **Containerization**: Docker
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
 
-### Apps and Packages
+---
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+## ⚙️ Requirements
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- [Bun](https://bun.sh) (runtime)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Docker](https://www.docker.com/)
+- Firebase Admin credentials
 
-### Utilities
+---
 
-This Turborepo has some additional tools already setup for you:
+## 🔐 Environment Variables
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+Create a `.env` file in the apps/web or simply run `cp .env.example .env` :
 
-### Build
+```env
 
-To build all apps and packages, run the following command:
+NEXT_PUBLIC_API_KEY=
+NEXT_PUBLIC_AUTH_DOMAIN=
+NEXT_PUBLIC_PROJECT_ID=
+NEXT_PUBLIC_STORAGE_BUCKET=
+NEXT_PUBLIC_SENDER_ID=
+NEXT_PUBLIC_APP_ID=
+NEXT_PUBLIC_MEASUREMENT_ID=
 
-```
-cd my-turborepo
-pnpm build
-```
+Create a file `serviceAccountKey.json` at apps/server/src/auth which looks something like this : 
 
-### Develop
+{
+  "type": ,
+  "project_id": ,
+  "private_key_id": ,
+  "private_key": ,
+  "client_email":,
+  "client_id": ,
+  "auth_uri": ",
+  "token_uri": ,
+  "auth_provider_x509_cert_url":,
+  "client_x509_cert_url": ,
+  "universe_domain": 
+}
 
-To develop all apps and packages, run the following command:
+Create a `.env` file in the apps/server or simply run `cp .env.example .env` :
 
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+GEMINI_API_KEY=
+DATABASE_URL=
 
 ```
-npx turbo link
+
+### Set up Database
+
+```
+cd apps/server
+docker compose up -d
+bunx prisma generate
+bunx prisma migrate dev --name init
 ```
 
-## Useful Links
+### Development Script
+```
+bun server:up
+bun web:up
 
-Learn more about the power of Turborepo:
+```
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
