@@ -55,46 +55,16 @@ export function CreateUserForm() {
       email: values.email,
       password: values.password,
     })
+
     
-    isSuccess && toast.success("User created successfully")
-     isSuccess && console.log
-    console.log(values)
     // loginUser(values.email, values.password)
   }
 
-//   const loginUser = async (email: string, password: string) => {
-//     try {
-//         const userCredential = await signInWithEmailAndPassword(auth,email,password);
-//         // console.log(user)
-//         const user = userCredential.user;
 
-//         const tokenResult = await user.getIdTokenResult();
-//         const role = tokenResult.claims.role;
-        
-//         if(role === "staff"){
-//             toast("logged in as staff")
-//             localStorage.setItem("role",role)
-//             router.push("/staff")
-//         }
-//         else if(role === "admin"){
-//             toast("logged in as admin")
-//             localStorage.setItem("role",role)
-//             router.push("/admin")
-//         }
-//         else{
-//             toast("user does not exist")
-//             router.push("/login")
-//         }
-//     } catch (error) {
-//         toast("invalid credentials")
-//         console.log(error)
-//     }
- 
-//   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col ">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 flex flex-col ">
         <FormField
           control={form.control}
           name="email"

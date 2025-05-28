@@ -6,7 +6,7 @@ generated
 out
 dist
 *.tgz
-
+serviceAccountKey.json
 # code coverage
 coverage
 *.lcov

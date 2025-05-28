@@ -23,11 +23,12 @@ export function useCreateUser() {
       onSuccess: (_, { email, password }) => {
         // Update the cache or refetch subscription status
         queryClient.invalidateQueries({ queryKey: ['users'] });
-        
+        toast.success("User created successfully");
 
       },
       onError: (error) => {
-        toast.error("Error creating user: " + error.message);
+        console.log(error)
+        toast.error("Error creating user");
       }
     });
 }
@@ -45,8 +46,13 @@ export function useResetUserPassword() {
       onSuccess: (_, { email, password }) => {
         // Update the cache or refetch subscription status
         queryClient.invalidateQueries({ queryKey: ['users'] });
+        toast.success("User password reset successfully");
 
       },
+      onError: (error) => {
+        console.log(error)
+        toast.error("Error resetting user password");
+      }
     });
 }
 

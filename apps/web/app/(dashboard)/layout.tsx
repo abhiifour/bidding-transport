@@ -1,4 +1,6 @@
 "use client"
+import { Button } from "@/components/ui/button";
+import { auth } from "@/lib/firebase";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -12,18 +14,26 @@ export default function DashboardLayout({
   const path = usePathname();
   const router = useRouter();
 
+  const handleLogout = () => {
+    auth.signOut()
+    localStorage.removeItem("role");
+    localStorage.removeItem("token");
+    router.push("/");
+  }
+
   useEffect(() => {
     const getRole = localStorage.getItem("role");
     if (getRole) {
       setRole(getRole);
-      setTab(getRole === "admin" ? "staffs" : "bids");
+      setTab(getRole === "admin" ? "deals" : "bids");
     }
   }, []);
 
   return (
     <div className="w-[1000px] mx-auto mt-8">
       {role === "admin" && (
-        <div className="flex justify-start items-center gap-4 text-xl">
+       <div className="flex justify-between items-center">
+              <div className="flex justify-start items-center gap-4 text-xl">
           <p
             onClick={() => {
               router.push(`/admin/staffs`);
@@ -52,10 +62,13 @@ export default function DashboardLayout({
             Deals
           </p>
         </div>
+        <Button onClick={handleLogout} className="bg-black/10  text-black hover:bg-black hover:text-white">Logout</Button>
+       </div>
       )}
 
       {role === "staff" && (
-        <div className="text-xl flex justify-start items-center gap-4">
+       <div className="flex justify-between items-center">
+         <div className="text-xl flex justify-start items-center gap-4">
           <p
             onClick={() => {
               router.push(`/staff`);
@@ -75,6 +88,8 @@ export default function DashboardLayout({
             Manual Deals
           </p>
         </div>
+        <Button onClick={handleLogout} className="bg-black/10  text-black hover:bg-black hover:text-white">Logout</Button>
+       </div>
       )}
 
       <div className="mt-10">{children}</div>

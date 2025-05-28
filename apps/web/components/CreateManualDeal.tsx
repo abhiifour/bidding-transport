@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
+import { useCreateManualDeal } from "@/hooks/useDeal"
+import { auth } from "@/lib/firebase"
 
 
 
@@ -23,25 +25,24 @@ const formSchema = z.object({
   materialType: z.string().min(4, {
     message: "Enter a valid material type",
   }),
-  quantity: z.number().min(1, {
+  quantity: z.coerce.number().min(1, {
     message: "Enter a valid quantity",
   }),
-  amount: z.number().min(1, {
+  amount: z.coerce.number().min(1, {
     message: "Enter a valid amount",
   }),
   transporterId: z.string().min(2, {
     message: "Enter a valid transporter ID",
   }),
-  dealDate: z.date().min(new Date(), {
-    message: "Enter a deadline",
-  }),
+  dealDate: z.date()
 })
 
 
 export function CreateManualDeal() {
- 
-  const router = useRouter()
   
+  const {mutate , isError, isSuccess} = useCreateManualDeal()
+  const router = useRouter()
+  const user = auth.currentUser
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -58,38 +59,19 @@ export function CreateManualDeal() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-
+    mutate({
+      materialType: values.materialType,
+      quantity: values.quantity,
+      amount: values.amount,
+      transporterId: values.transporterId,
+      dealDate: values.dealDate,
+      loggedById: user?.uid ?? ""
+    })
     console.log(values)
     // loginUser(values.email, values.password)
   }
 
-//   const loginUser = async (email: string, password: string) => {
-//     try {
-//         const userCredential = await signInWithEmailAndPassword(auth,email,password);
-//         // console.log(user)
-//         const user = userCredential.user;
 
-//         const tokenResult = await user.getIdTokenResult();
-//         const role = tokenResult.claims.role;
-        
-//         if(role === "staff"){
-//             toast("logged in as staff")
-//             router.push("/staff")
-//         }
-//         else if(role === "admin"){
-//             toast("logged in as admin")
-//             router.push("/admin")
-//         }
-//         else{
-//             toast("user does not exist")
-//             router.push("/login")
-//         }
-//     } catch (error) {
-//         toast("invalid credentials")
-//         console.log(error)
-//     }
- 
-//   }
 
   return (
     <Form {...form}>
@@ -103,9 +85,7 @@ export function CreateManualDeal() {
               <FormControl>
                 <Input placeholder="Bricks" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your email provided by the admin
-              </FormDescription>
+            
               <FormMessage />
             </FormItem>
           )}
@@ -120,9 +100,7 @@ export function CreateManualDeal() {
               <FormControl>
                 <Input type="number" placeholder="1" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your password provided by the admin
-              </FormDescription>
+             
               <FormMessage />
             </FormItem>
           )}
@@ -137,9 +115,7 @@ export function CreateManualDeal() {
               <FormControl>
                 <Input type="number" placeholder="delhi" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your password provided by the admin
-              </FormDescription>
+             
               <FormMessage />
             </FormItem>
           )}
@@ -155,9 +131,7 @@ export function CreateManualDeal() {
               <FormControl>
                 <Input placeholder="Mumbai" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your password provided by the admin
-              </FormDescription>
+          
               <FormMessage />
             </FormItem>
           )}
@@ -170,7 +144,7 @@ export function CreateManualDeal() {
           name="dealDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Deadline</FormLabel>
+              <FormLabel>Deal Date</FormLabel>
               <FormControl>
                 <Input   type="date"
                   placeholder="Select a date"
@@ -181,9 +155,7 @@ export function CreateManualDeal() {
                   ref={field.ref}
                    />
               </FormControl>
-              <FormDescription>
-                This is your password provided by the admin
-              </FormDescription>
+            
               <FormMessage />
             </FormItem>
           )}

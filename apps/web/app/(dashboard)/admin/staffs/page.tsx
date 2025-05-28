@@ -17,15 +17,15 @@ export default function StaffsDetailPage(){
         <div>
            <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">Staffs Detail Page</h1>
-          <Dialog>
+             <Dialog>
                 <DialogTrigger className="bg-black rounded-lg text-white px-6 py-1.5 cursor-pointer">Add User</DialogTrigger>
-                <DialogContent className="sm:max-w-[600px]">
+                <DialogContent className="sm:max-w-[400px]">
                 <DialogHeader>
                 <DialogTitle>Create a user</DialogTitle>
                 </DialogHeader>
                 <CreateUserForm/>
                 </DialogContent>
-                </Dialog>
+              </Dialog>
            </div>
            <div className="mt-10">
             <UserTable/>

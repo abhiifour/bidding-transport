@@ -88,7 +88,7 @@ export function TransporterTable() {
                                         <DialogTrigger className="">Edit</DialogTrigger>
                                         <DialogContent className="sm:max-w-[600px]">
                                         <DialogHeader>
-                                        <DialogTitle>add a transporter</DialogTitle>
+                                        <DialogTitle>Edit a transporter</DialogTitle>
                                         </DialogHeader>
                                         <EditTransporterForm
                                             name={transporter.name}

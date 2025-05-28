@@ -1,27 +1,27 @@
+"use client"
+import { useGetABidOffer } from "@/hooks/useBidOffer";
 import React from "react";
 
-const DealCard = ({ deal }:any) => (
+export default function DealCard  ({ deal }:any) {
+
+    const { data: bidOffer} = useGetABidOffer(deal.bidId)
+    console.log(bidOffer)
+
+    return (
     <div className="border border-gray-200 rounded-lg p-5 mb-4 bg-white text-sm">
-        <h3 className="m-0 font-semibold text-base">{deal.materialType}</h3>
+        <h3 className="m-0 font-semibold text-base">{bidOffer?.[0].bid?.materialType}</h3>
         <div className="text-gray-500 text-sm mb-2">
-            Deal Date: {new Date(deal.dealDate).toLocaleDateString()}
+            Deal Date: {new Date(deal.createdAt).toLocaleDateString()}
         </div>
         <div>
-            <strong>Amount:</strong> ₹{deal.amount.toLocaleString()}
+            <strong>Amount:</strong> ₹{bidOffer?.[0].offeredPrice}
         </div>
-        <div>
-            <strong>Quantity:</strong> {deal.quantity}
+        <div>   
+            <strong>Quantity:</strong> {bidOffer?.[0].bid?.quantity}
         </div>
         <div>
             <strong>Transporter:</strong> {deal.transporter.name}
         </div>
-        <div>
-            <strong>Logged By:</strong> {deal.loggedBy.name}
-        </div>
-        <div className="text-gray-400 text-xs mt-2">
-            Created: {new Date(deal.createdAt).toLocaleString()}
-        </div>
-    </div>
-);
-
-export default DealCard;
+       
+    </div>)
+};

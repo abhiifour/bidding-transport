@@ -16,49 +16,42 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
-import { signInWithEmailAndPassword } from "firebase/auth"
+import {  useEditManualDeal } from "@/hooks/useDeal"
 import { auth } from "@/lib/firebase"
-import { toast } from "sonner"
-import { useCreateBid } from "@/hooks/useBid"
+
 
 
 const formSchema = z.object({
-    materialType: z.string().min(4, {
-        message: "Enter a valid material type",
-    }),
-    quantity: z.string().min(2, {
-        message: "Enter a valid quantity",
-    }),
-    pickupLocation: z.string().min(2, {
-    message: "Enter a valid location",
-    }),
-    deliveryLocation: z.string().min(2, {
-    message: "Enter a valid location",
-    }),
-    deadline: z.date().min(new Date(), {
-    message: "Enter a  deadline",
-    }),
-    requirement: z.string().min(0, {
-    message: "any requirements",
-    }),
+  materialType: z.string().min(4, {
+    message: "Enter a valid material type",
+  }),
+  quantity: z.coerce.number().min(1, {
+    message: "Enter a valid quantity",
+  }),
+  amount: z.coerce.number().min(1, {
+    message: "Enter a valid amount",
+  }),
+  transporterId: z.string().min(2, {
+    message: "Enter a valid transporter ID",
+  }),
+  dealDate: z.date()
 })
 
 
-export function CreateBidForm() {
-  const {mutate , isError, isSuccess} = useCreateBid()
-  const user = auth.currentUser
+export function EditManualDeal({materialType,quantity,amount,transporterId,dealDate,id, loggedById}:any) {
+
+  const {mutate , isError, isSuccess} = useEditManualDeal()
   const router = useRouter()
-  
+  const user = auth.currentUser
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      materialType: "",
-      quantity: "",
-      pickupLocation:"",
-      deliveryLocation: "",
-      deadline: new Date(),
-      requirement: ""
+      materialType: materialType ?? "",
+      quantity: quantity ?? 0,
+      amount: amount ?? 0,
+      transporterId: transporterId ?? "",
+      dealDate: dealDate ?? new Date(),
     },
   })
  
@@ -67,13 +60,13 @@ export function CreateBidForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     mutate({
-      requirement: values.requirement,
-      createdById: user?.uid ?? "", // Replace with actual user ID
       materialType: values.materialType,
-      quantity: parseInt(values.quantity, 10),
-      pickupLocation: values.pickupLocation,
-      deliveryLocation: values.deliveryLocation,
-      deadline: values.deadline
+      quantity: values.quantity,
+      amount: values.amount,
+      transporterId: values.transporterId,
+      dealDate: values.dealDate,
+      id: id,
+      loggedById: loggedById
     })
     console.log(values)
     // loginUser(values.email, values.password)
@@ -107,7 +100,7 @@ export function CreateBidForm() {
               <FormControl>
                 <Input type="number" placeholder="1" {...field} />
               </FormControl>
-            
+             
               <FormMessage />
             </FormItem>
           )}
@@ -115,14 +108,14 @@ export function CreateBidForm() {
 
         <FormField
           control={form.control}
-          name="pickupLocation"
+          name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Pickup Location</FormLabel>
+              <FormLabel>Amount</FormLabel>
               <FormControl>
-                <Input placeholder="delhi" {...field} />
+                <Input type="number" placeholder="delhi" {...field} />
               </FormControl>
-            
+          
               <FormMessage />
             </FormItem>
           )}
@@ -131,14 +124,14 @@ export function CreateBidForm() {
 
         <FormField
           control={form.control}
-          name="deliveryLocation"
+          name="transporterId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Delivery Location</FormLabel>
+              <FormLabel>Transporter Id</FormLabel>
               <FormControl>
                 <Input placeholder="Mumbai" {...field} />
               </FormControl>
-              
+            
               <FormMessage />
             </FormItem>
           )}
@@ -148,10 +141,10 @@ export function CreateBidForm() {
 
         <FormField
           control={form.control}
-          name="deadline"
+          name="dealDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Deadline</FormLabel>
+              <FormLabel>Deal Date</FormLabel>
               <FormControl>
                 <Input   type="date"
                   placeholder="Select a date"
@@ -162,28 +155,13 @@ export function CreateBidForm() {
                   ref={field.ref}
                    />
               </FormControl>
-           
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-
-        <FormField
-          control={form.control}
-          name="requirement"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Requirement</FormLabel>
-              <FormControl>
-                <Input placeholder="anything" {...field} />
-              </FormControl>
             
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="cursor-pointer px-8 py-1">Create</Button>
+
+        <Button type="submit" className="cursor-pointer px-8 py-1">Edit</Button>
       </form>
     </Form>
   )

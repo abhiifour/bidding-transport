@@ -58,7 +58,7 @@ export function useEditManualDeal() {
       onSuccess: (_, { }) => {
         // Update the cache or refetch subscription status
         queryClient.invalidateQueries({ queryKey: ['manualDeals'] });
-        toast.success("manual deal updated")
+        toast.success("Manual deal updated")
 
       },
       onError: (error) => {

@@ -10,11 +10,20 @@ import {
 } from "@/components/ui/table"
 import { EllipsisVertical } from "lucide-react"
 import {
+  Dialog,
+  DialogContent,
+
+
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { useDeleteUser, useGetUsers } from "@/hooks/useUser"
+import { ResetUserForm } from "./resetUserForm"
 
 
 // Example data matching the User schema
@@ -64,8 +73,21 @@ export function UserTable() {
                         <TableCell>
                         <Popover>
                         <PopoverTrigger><EllipsisVertical size={14}/></PopoverTrigger>
-                        <PopoverContent className="max-w-[100px] p-0">
-                            <p className="cursor-pointer hover:bg-black/5 px-2 py-1 text-center" onClick={() => {mutate({email: user?.email})}} >Delete</p>
+                        
+                                <PopoverContent className="max-w-[100px] p-0  text-sm">
+                                    <div className="cursor-pointer hover:bg-black/5 px-2 py-1 text-center">   
+                                    <Dialog>
+                                        <DialogTrigger className="">Edit</DialogTrigger>
+                                        <DialogContent >
+                                        <DialogTitle>
+                                            Edit 
+                                        </DialogTitle>
+                                        <ResetUserForm email={user?.email} />
+                                        </DialogContent>
+                                    </Dialog>
+                                    </div>
+                                    <p className="cursor-pointer hover:bg-black/5 px-2 py-1 text-center" onClick={() => {mutate({email: user?.email})}} >Delete</p>
+
                         </PopoverContent>
                         </Popover>
 
